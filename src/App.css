@@ -7,7 +7,6 @@
   grid-template-rows: repeat(8, 1fr);
   height: 100vw;
   width: 100vw;
-  background-color: rgb(101, 114, 114);
 }
 .board {
   display: grid;
@@ -17,7 +16,6 @@
 span{
   display: grid;
   place-items: center;
-  border: 1px solid;
   width: 100%;
   height: 100%;
 }
@@ -27,6 +25,12 @@ span{
 .board:nth-child(odd) span:nth-child(odd){
   background-color: rgb(212, 167, 99);
 }
+.board:nth-child(even) span:nth-child(odd){
+  background-color: rgb(101, 114, 114);
+}
+.board:nth-child(odd) span:nth-child(even){
+  background-color: rgb(101, 114, 114);
+}
 .white{
   color: white;
   font-size: 2rem;
@@ -34,4 +38,7 @@ span{
 .black{
   color: black;
   font-size: 2rem;
+}
+.active{
+  border: 2px solid blueviolet !important;
 }
