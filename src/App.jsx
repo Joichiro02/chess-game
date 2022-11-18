@@ -3,6 +3,7 @@ import {FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, Fa
 import './App.css';
 import { knightMoveFrom, knightMoveTo } from "./pieces/knight";
 import { pawnMoveFrom, pawnMoveTo } from "./pieces/pawn";
+import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
 
 const PIECES = {
   white:{
@@ -85,7 +86,8 @@ function App() {
           pawnMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
           break;
         case "ROOK":
-          console.log("Rook Move");
+          setPieceMoved("ROOK");
+          rookMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
           break;
         case "HORSE":
           setPieceMoved("HORSE");
@@ -112,10 +114,10 @@ function App() {
           pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
           break;
         case "ROOK":
-          console.log("Rook Move To");
+          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
           break;
         case "HORSE":
-          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove)
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
           break;
         case "BISHOP":
           console.log("Bishop Move To");
