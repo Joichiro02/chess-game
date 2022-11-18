@@ -1,7 +1,7 @@
-import classNames from "classnames";
 import { useState } from 'react';
 import {FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn} from "react-icons/fa";
 import './App.css';
+import { pawnMoveFrom, pawnMoveTo } from "./pieces/pawn";
 
 const PIECES = {
   white:{
@@ -28,22 +28,25 @@ const PIECES = {
   },
 }
 
-const pawnMove = (board, row, col, setPossibleMove) => {
-  if(board[row][col] === "WP"){
-    if(row === 6){
-      setPossibleMove([row - 1, row - 2])
-    }
-    else{
-      setPossibleMove([row - 1])
-    }
+const pieceToMove = (board, row, col) => {
+  const pieceName = board[row][col];
+  if(["BP", "WP"].includes(pieceName)){
+    return "PAWN";
   }
-  else{
-    if(row === 2){
-      setPossibleMove([row + 1, row + 2])
-    }
-    else{
-      setPossibleMove([row + 1])
-    }
+  else if (["BKR", "BQR", "WKR", "WQR"].includes(pieceName)){
+    return "ROOK";
+  }
+  else if (["BKH", "BQH", "WKH", "WQH"].includes(pieceName)){
+    return "HORSE";
+  }
+  else if (["BKB", "BQB", "WKB", "WQB"].includes(pieceName)){
+    return "BISHOP";
+  }
+  else if (["BQ", "WQ"].includes(pieceName)){
+    return "QUEEN";
+  }
+  else if (["BK", "WK"].includes(pieceName)){
+    return "KING";
   }
 }
 
@@ -58,72 +61,68 @@ function App() {
     ["", "", "", "", "", "", "", ""],
     ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
     ["WKR", "WKH", "WKB", "WK", "WQ", "WQB", "WQH", "WQR"],
-    
-  ])
+  ]);
   const [move, setMove] = useState(false);
-  const [playerMove, setPlayerMove] = useState("W");
-  const [piece, setPiece] = useState("");
-  const [prevMove, setPrevMove] = useState({
+  const [pieceMove, setPieceMove] = useState("");
+  const [pieceMoved, setPieceMoved] = useState("");
+  const [firstMove, setFirstMove] = useState({
     row: null,
     col: null
-  })
-  const [pawnPossibleRowMove, setPawnPossibleRowMove] = useState([]);
-  const [pawnPossibleColMove, setPawnPossibleColMove] = useState([]);
-  // const [element, setElement] = useState(null);
+  });
+  const [legalMove, setLegalMove] = useState(null);
 
   const handleMove = (e, row, col) => {
-    console.log(playerMove, board[row][col], board[row][col].includes(playerMove))
-    if(board[row][col] === "" && !move) return;
-    // if(board[row][col].includes(playerMove) || piece) return;
-    const pieceMove = board[row][col];
-    console.log({row, col});
-    const newBoard = [...board];
-    // newBoard[4][6] = "BQ";
-    // setBoard(newBoard);
-    // if(e.target.localName === "span"){
-    //   e.target.classList.add("active");
-    //   setElement(e);
-    // }
-    // else{
-    //   console.log(e.target.parentElement.parentElement.classList.add("active"));
-      
-    // }
+    if(!move && board[row][col] === "") return console.log("please select piece!!!");
+    const PIECE = pieceToMove(board, row, col);
     if(!move){
-      // e.target.classList.add("active");
-      setPiece(pieceMove);
       setMove(true);
-      setPrevMove({row, col});
-      pawnMove(newBoard, row, col, setPawnPossibleRowMove);
-      setPawnPossibleColMove([col]);
+      switch (PIECE) {
+        case "PAWN":
+          setPieceMoved("PAWN");
+          pawnMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
+          break;
+        case "ROOK":
+          console.log("Rook Move");
+          break;
+        case "HORSE":
+          console.log("Horse Move");
+          break;
+        case "BISHOP":
+          console.log("Bishop Move");
+          break;
+        case "QUEEN":
+          console.log("Queen Move");
+          break;
+        case "KING":
+          console.log("King Move");
+          break;
+        default:
+          break;
+      }
     }
     else{
-      if(piece.includes("W")){
-        setPlayerMove("B")
-      }
-      else{
-        setPlayerMove("W")
-      }
-      if((piece === "WP" || piece === "BP") && pawnPossibleRowMove.includes(row)){
-        if(board[row][col] !== "" && pawnPossibleColMove.includes(col)){
-          setMove(false);
-        }
-        else if(board[row][col].includes("B") || board[row][col].includes("W")){
-          newBoard[row][col] = piece;
-          newBoard[prevMove.row][prevMove.col] = "";
-          setBoard(newBoard);
-          setMove(false);
-        }
-        else if (board[row][col].includes("") && pawnPossibleColMove.includes(col)){
-          newBoard[row][col] = piece;
-          newBoard[prevMove.row][prevMove.col] = "";
-          setBoard(newBoard);
-          setMove(false);
-        }
-        else{
-          setMove(false);
-        }
-      }else{
-        setMove(false);
+      setMove(false);
+      switch (pieceMoved) {
+        case "PAWN":
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
+          break;
+        case "ROOK":
+          console.log("Rook Move To");
+          break;
+        case "HORSE":
+          console.log("Horse Move To");
+          break;
+        case "BISHOP":
+          console.log("Bishop Move To");
+          break;
+        case "QUEEN":
+          console.log("Queen Move To");
+          break;
+        case "KING":
+          console.log("King Move To");
+          break;
+        default:
+          break;
       }
     }
   }
