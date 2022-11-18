@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn} from "react-icons/fa";
 import './App.css';
+import { knightMoveFrom, knightMoveTo } from "./pieces/knight";
 import { pawnMoveFrom, pawnMoveTo } from "./pieces/pawn";
 
 const PIECES = {
@@ -70,9 +71,11 @@ function App() {
     col: null
   });
   const [legalMove, setLegalMove] = useState(null);
+  // const [lastMove, setLastMove] = useState("B") for player turn
 
   const handleMove = (e, row, col) => {
     if(!move && board[row][col] === "") return console.log("please select piece!!!");
+    // if(board[row][col].startsWith(lastMove)) return alert(lastMove === "B" ? "White Turn" : "Black Turn"); //for player turn
     const PIECE = pieceToMove(board, row, col);
     if(!move){
       setMove(true);
@@ -85,7 +88,8 @@ function App() {
           console.log("Rook Move");
           break;
         case "HORSE":
-          console.log("Horse Move");
+          setPieceMoved("HORSE");
+          knightMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
           break;
         case "BISHOP":
           console.log("Bishop Move");
@@ -102,6 +106,7 @@ function App() {
     }
     else{
       setMove(false);
+      // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
           pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
@@ -110,7 +115,7 @@ function App() {
           console.log("Rook Move To");
           break;
         case "HORSE":
-          console.log("Horse Move To");
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove)
           break;
         case "BISHOP":
           console.log("Bishop Move To");

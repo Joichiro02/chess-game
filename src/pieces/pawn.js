@@ -32,16 +32,10 @@ export const pawnMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
     }
 }
 
-// const newBoard = [...board];
-// newBoard[row][col] = pieceMove;
-// newBoard[firstMove.row][firstMove.col] = "";
-// setBoard(newBoard);
-// setPieceMove("");
-// setFirstMove({row:null, col:null});
+
 export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove) => {
     //for attacking piece
-    if(board[row][col] !== "" && (col === firstMove.col + 1 || col === firstMove.col - 1)){
-        console.log("attacking");
+    if(board[row][col] !== "" && (col === firstMove.col + 1 || col === firstMove.col - 1) && pieceMove[0] !== board[row][col][0]){
         const newBoard = [...board]; 
         newBoard[row][col] = pieceMove;
         newBoard[firstMove.row][firstMove.col] = "";
