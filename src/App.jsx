@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import {FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn} from "react-icons/fa";
 import './App.css';
+import classNames from "classnames";
+import { FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn } from "react-icons/fa";
 import { bishopMoveFrom, bishopMoveTo } from "./pieces/bishop";
 import { kingMoveFrom, kingMoveTo } from "./pieces/king";
 import { knightMoveFrom, knightMoveTo } from "./pieces/knight";
@@ -9,48 +10,48 @@ import { queenMoveFrom, queenMoveTo } from "./pieces/queen";
 import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
 
 const PIECES = {
-  white:{
-    "WKR": <FaChessRook className={"white"}/>,
-    "WKH": <FaChessKnight className="white"/>,
-    "WKB": <FaChessBishop className="white"/>,
-    "WK": <FaChessKing className="white"/>,
-    "WQ": <FaChessQueen className="white"/>,
-    "WQB": <FaChessBishop className="white"/>,
-    "WQH": <FaChessKnight className="white"/>,
-    "WQR": <FaChessRook className="white"/>,
-    "WP": <FaChessPawn className="white"/>
+  white: {
+    "WKR": <FaChessRook className={"white"} />,
+    "WKH": <FaChessKnight className="white" />,
+    "WKB": <FaChessBishop className="white" />,
+    "WK": <FaChessKing className="white" />,
+    "WQ": <FaChessQueen className="white" />,
+    "WQB": <FaChessBishop className="white" />,
+    "WQH": <FaChessKnight className="white" />,
+    "WQR": <FaChessRook className="white" />,
+    "WP": <FaChessPawn className="white" />
   },
-  black:{
-    "BKR": <FaChessRook className="black"/>,
-    "BKH": <FaChessKnight className="black"/>,
-    "BKB": <FaChessBishop className="black"/>,
-    "BK": <FaChessKing className="black"/>,
-    "BQ": <FaChessQueen className="black"/>,
-    "BQB": <FaChessBishop className="black"/>,
-    "BQH": <FaChessKnight className="black"/>,
-    "BQR": <FaChessRook className="black"/>,
-    "BP": <FaChessPawn className="black"/>
+  black: {
+    "BKR": <FaChessRook className="black" />,
+    "BKH": <FaChessKnight className="black" />,
+    "BKB": <FaChessBishop className="black" />,
+    "BK": <FaChessKing className="black" />,
+    "BQ": <FaChessQueen className="black" />,
+    "BQB": <FaChessBishop className="black" />,
+    "BQH": <FaChessKnight className="black" />,
+    "BQR": <FaChessRook className="black" />,
+    "BP": <FaChessPawn className="black" />
   },
 }
 
 const pieceToMove = (board, row, col) => {
   const pieceName = board[row][col];
-  if(["BP", "WP"].includes(pieceName)){
+  if (["BP", "WP"].includes(pieceName)) {
     return "PAWN";
   }
-  else if (["BKR", "BQR", "WKR", "WQR"].includes(pieceName)){
+  else if (["BKR", "BQR", "WKR", "WQR"].includes(pieceName)) {
     return "ROOK";
   }
-  else if (["BKH", "BQH", "WKH", "WQH"].includes(pieceName)){
+  else if (["BKH", "BQH", "WKH", "WQH"].includes(pieceName)) {
     return "HORSE";
   }
-  else if (["BKB", "BQB", "WKB", "WQB"].includes(pieceName)){
+  else if (["BKB", "BQB", "WKB", "WQB"].includes(pieceName)) {
     return "BISHOP";
   }
-  else if (["BQ", "WQ"].includes(pieceName)){
+  else if (["BQ", "WQ"].includes(pieceName)) {
     return "QUEEN";
   }
-  else if (["BK", "WK"].includes(pieceName)){
+  else if (["BK", "WK"].includes(pieceName)) {
     return "KING";
   }
 }
@@ -78,10 +79,10 @@ function App() {
   // const [lastMove, setLastMove] = useState("B") for player turn
 
   const handleMove = (e, row, col) => {
-    if(!move && board[row][col] === "") return console.log("please select piece!!!");
+    if (!move && board[row][col] === "") return console.log("please select piece!!!");
     // if(board[row][col].startsWith(lastMove)) return alert(lastMove === "B" ? "White Turn" : "Black Turn"); //for player turn
     const PIECE = pieceToMove(board, row, col);
-    if(!move){
+    if (!move) {
       setMove(true);
       switch (PIECE) {
         case "PAWN":
@@ -112,7 +113,7 @@ function App() {
           break;
       }
     }
-    else{
+    else {
       setMove(false);
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
@@ -148,10 +149,10 @@ function App() {
             <div className="board" key={i}>
               {
                 row.map((column, j) => (
-                  <span key={j} onClick={(e) => handleMove(e, i, j)}>
+                  <span key={j} onClick={(e) => handleMove(e, i, j)} className={classNames({ "hasHover": board[i][j] !== "" })}>
                     {
-                    board[i][j].startsWith("W") ? PIECES.white[board[i][j]] : "" ||
-                    board[i][j].startsWith("B") ? PIECES.black[board[i][j]] : ""
+                      board[i][j].startsWith("W") ? PIECES.white[board[i][j]] : "" ||
+                        board[i][j].startsWith("B") ? PIECES.black[board[i][j]] : ""
                     }
                   </span>
                 ))
