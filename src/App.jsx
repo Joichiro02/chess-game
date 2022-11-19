@@ -2,8 +2,10 @@ import { useState } from 'react';
 import {FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn} from "react-icons/fa";
 import './App.css';
 import { bishopMoveFrom, bishopMoveTo } from "./pieces/bishop";
+import { kingMoveFrom, kingMoveTo } from "./pieces/king";
 import { knightMoveFrom, knightMoveTo } from "./pieces/knight";
 import { pawnMoveFrom, pawnMoveTo } from "./pieces/pawn";
+import { queenMoveFrom, queenMoveTo } from "./pieces/queen";
 import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
 
 const PIECES = {
@@ -96,13 +98,15 @@ function App() {
           break;
         case "BISHOP":
           setPieceMoved("BISHOP");
-          bishopMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove)
+          bishopMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
           break;
         case "QUEEN":
-          console.log("Queen Move");
+          setPieceMoved("QUEEN");
+          queenMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
           break;
         case "KING":
-          console.log("King Move");
+          setPieceMoved("KING");
+          kingMoveFrom(board, row, col, setPieceMove, setFirstMove);
           break;
         default:
           break;
@@ -125,10 +129,10 @@ function App() {
           bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
           break;
         case "QUEEN":
-          console.log("Queen Move To");
+          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
           break;
         case "KING":
-          console.log("King Move To");
+          kingMoveTo(board, row, col, firstMove, pieceMove);
           break;
         default:
           break;
