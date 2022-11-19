@@ -5,26 +5,26 @@ export const bishopMoveFrom = (board, row, col, setPieceMove, setFirstMove, setL
 }
 
 export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove) => {
-    console.log(row, col)
     let havePositiveInteraction = false;
     let haveNegativeInteraction = false;
+    //for positive diagonal
     for(let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++){
         for(let j = Math.min(firstMove.col, col); j < Math.max(firstMove.col, col); j++){
             if((firstMove.row + firstMove.col) === (i + j) && !havePositiveInteraction){
-                console.log(board[i][j])
                 if(row === i && col === j)continue;
                 if(board[i][j] !== "" && board[i][j] !== pieceMove){
-                    havePositiveInteraction = true
+                    havePositiveInteraction = true;
                 }
             }
         }
     }
+    //for negative diagonal
     for(let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++){
         for(let j = Math.min(firstMove.col, col); j < Math.max(firstMove.col, col); j++){
             if((firstMove.row - firstMove.col) === (i - j) && !haveNegativeInteraction){
                 if(row === i && col === j)continue;
                 if(board[i][j] !== "" && board[i][j] !== pieceMove){
-                    haveNegativeInteraction = true
+                    haveNegativeInteraction = true;
                 }
             }
         }
