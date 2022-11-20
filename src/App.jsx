@@ -181,7 +181,7 @@ function App() {
           queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove, setIllegalMove, setPlayerTurn);
+          kingMoveTo(board, row, col, firstMove, pieceMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         default:
           break;

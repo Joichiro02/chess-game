@@ -9,6 +9,10 @@ export const queenMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLe
 }
 export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
     console.log(legalMove)
-    board[row][col] = pieceMove;
-    board[firstMove.row][firstMove.col] = "";
+    const newBoard = [...board];
+    newBoard[row][col] = pieceMove;
+    newBoard[firstMove.row][firstMove.col] = "";
+    setBoard(newBoard);
+    setPieceMove("");
+    setFirstMove({ row: null, col: null })
 }
