@@ -40,7 +40,7 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
         wrongTurn(pieceMove, setPlayerTurn, true);
         return illegalMove(setIllegalMove);
     }
-    if (!board[row][col].includes(pieceMove[0])) {
+    if (!board[row][col].startsWith(pieceMove[0])) {
         if (legalMove.includes(row + col) || legalMove.includes(row - col)) {
             if (row === firstMove.row && col === firstMove.col) return;
             const newBoard = [...board];
@@ -53,6 +53,7 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
         }
     }
     else {
+        console.log("else");
         illegalMove(setIllegalMove);
         wrongTurn(pieceMove, setPlayerTurn, true);
     }
