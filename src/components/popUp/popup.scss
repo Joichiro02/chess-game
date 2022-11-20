@@ -1,0 +1,33 @@
+.popupContainer {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    top: 50%;
+    left: 50%;
+    width: 30vw;
+    height: 10vh;
+    transform: translate(-50%, -50%);
+    background-color: rgba(209, 19, 19, 0.741);
+    animation: alert .5s ease;
+    color: #ddd;
+    font-size: 2rem;
+    border-radius: .5rem;
+
+    @keyframes alert {
+        0% {
+            transform: translate(-48%, -50%);
+        }
+
+        25% {
+            transform: translate(-52%, -50%);
+        }
+
+        50% {
+            transform: translate(-48%, -50%);
+        }
+
+        100% {
+            transform: translate(-52%, -50%);
+        }
+    }
+}
