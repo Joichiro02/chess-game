@@ -1,9 +1,9 @@
 import React from 'react';
 import "./popup.scss";
 
-const PopUp = () => {
+const PopUp = ({ message }) => {
   return (
-    <div className="popupContainer">Illegal Move!!!</div>
+    <div className="popupContainer">{message}</div>
   )
 }
 

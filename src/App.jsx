@@ -10,6 +10,11 @@ import { queenMoveFrom, queenMoveTo } from "./pieces/queen";
 import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
 import PopUp from "./components/popUp/PopUp";
 
+/*
+  BUGS
+    -black bishop to white bishop can't attack each other
+*/
+
 const PIECES = {
   white: {
     "WKR": <FaChessRook className={"white"} />,
@@ -57,6 +62,20 @@ const pieceToMove = (board, row, col) => {
   }
 }
 
+const wrongMove = (playerTurn, setWrongTurn) => {
+  if (playerTurn === "W") {
+    setWrongTurn(true);
+    setTimeout(() => {
+      setWrongTurn(false)
+    }, [500])
+  }
+  else {
+    setWrongTurn(true);
+    setTimeout(() => {
+      setWrongTurn(false)
+    }, [500])
+  }
+}
 
 function App() {
   const [board, setBoard] = useState([
@@ -69,15 +88,18 @@ function App() {
     ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
     ["WKR", "WKH", "WKB", "WK", "WQ", "WQB", "WQH", "WQR"],
   ]);
-  const [move, setMove] = useState(false);
-  const [pieceMove, setPieceMove] = useState("");
-  const [pieceMoved, setPieceMoved] = useState("");
+  const [move, setMove] = useState(false); // check if the piece is have been moved
+  const [pieceMove, setPieceMove] = useState(""); // record here the piece code that use in the array board
+  const [pieceMoved, setPieceMoved] = useState(""); // record the name of the piece that have been moved, it wull use in switch case
   const [firstMove, setFirstMove] = useState({
     row: null,
     col: null
-  });
-  const [legalMove, setLegalMove] = useState(null);
-  const [illegalMove, setIllegalMove] = useState(false);
+  }); // put here the row and column that will going to move
+  const [legalMove, setLegalMove] = useState(null); // add here the list of legal move
+  const [illegalMove, setIllegalMove] = useState(false); // this is use to trigger the popup modal
+  const [activeElement, setActiveElement] = useState(null); // save the element that have been click
+  const [playerTurn, setPlayerTurn] = useState("W");
+  const [wrongTurn, setWrongTurn] = useState(false);
   // const [lastMove, setLastMove] = useState("B") for player turn
 
   const handleMove = (e, row, col) => {
@@ -85,7 +107,24 @@ function App() {
     // if(board[row][col].startsWith(lastMove)) return alert(lastMove === "B" ? "White Turn" : "Black Turn"); //for player turn
     const PIECE = pieceToMove(board, row, col);
     if (!move) {
+      if (playerTurn !== board[row][col][0]) return wrongMove(playerTurn, setWrongTurn);
       setMove(true);
+      const boxes = document.getElementsByClassName("box");
+      for (let box of boxes) {
+        box.classList.remove("hasHover");
+      }
+      if (e.target.localName === "span") {
+        e.target.classList.add("hasToMoved");
+        setActiveElement(e.target);
+      }
+      else if (e.target.localName === "svg") {
+        e.target.parentElement.classList.add("hasToMoved");
+        setActiveElement(e.target.parentElement);
+      }
+      else if (e.target.localName === "path") {
+        e.target.parentElement.parentElement.classList.add("hasToMoved");
+        setActiveElement(e.target.parentElement.parentElement);
+      }
       switch (PIECE) {
         case "PAWN":
           setPieceMoved("PAWN");
@@ -116,26 +155,33 @@ function App() {
       }
     }
     else {
+      const boxes = document.getElementsByClassName("box");
+      for (let box of boxes) {
+        if (box.innerHTML === "") continue;
+        box.classList.add("hasHover");
+      }
+      activeElement.classList.remove("hasToMoved");
+      setActiveElement(null);
       setMove(false);
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
-          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "ROOK":
-          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
+          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "HORSE":
-          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "BISHOP":
-          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
+          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "QUEEN":
-          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
+          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove, setIllegalMove);
+          kingMoveTo(board, row, col, firstMove, pieceMove, setIllegalMove, setPlayerTurn);
           break;
         default:
           break;
@@ -151,7 +197,7 @@ function App() {
             <div className="board" key={i}>
               {
                 row.map((column, j) => (
-                  <span key={j} onClick={(e) => handleMove(e, i, j)} className={classNames({ "hasHover": board[i][j] !== "" })}>
+                  <span key={j} onClick={(e) => handleMove(e, i, j)} className={classNames("box", { "hasHover": board[i][j] !== "" })}>
                     {
                       board[i][j].startsWith("W") ? PIECES.white[board[i][j]] : "" ||
                         board[i][j].startsWith("B") ? PIECES.black[board[i][j]] : ""
@@ -163,7 +209,8 @@ function App() {
           ))
         }
       </div>
-      {illegalMove ? <PopUp /> : null}
+      {illegalMove ? <PopUp message={"Illegal Move!!!"} /> : null}
+      {wrongTurn ? <PopUp message={playerTurn === "W" ? "White turn" : "Black Turn"} /> : null}
     </div>
   )
 }

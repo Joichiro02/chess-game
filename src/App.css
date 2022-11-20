@@ -22,7 +22,7 @@
   place-items: center;
 }
 
-span {
+.box {
   display: grid;
   place-items: center;
   width: 100%;
@@ -35,7 +35,7 @@ span {
 }
 
 .hasToMoved {
-  background-color: blueviolet !important;
+  background-color: rgba(24, 137, 24, 0.5) !important;
 }
 
 .board:nth-child(even) span:nth-child(even) {

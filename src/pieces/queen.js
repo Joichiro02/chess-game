@@ -7,7 +7,7 @@ export const queenMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLe
     const leftSide = [{ row: row + 2, col: col - 2 }, { row: row - 1, col: col - 2 }];
     setLegalMove({ cross: [row + col, row - col], diagonal: [...topSide, ...bottomSide, ...rightSide, ...leftSide] });
 }
-export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove) => {
+export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
     console.log(legalMove)
     board[row][col] = pieceMove;
     board[firstMove.row][firstMove.col] = "";

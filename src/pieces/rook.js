@@ -1,4 +1,5 @@
 import { illegalMove } from "./illegalMove";
+import { wrongTurn } from "./wrongTurn";
 
 export const rookMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLegalMove) => {
     setPieceMove(board[row][col]);
@@ -14,7 +15,7 @@ export const rookMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
     setLegalMove([...columnMove, ...rowMove]);
 
 }
-export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove) => {
+export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
     let validMove = false;
     let haveInteraction = false;
     for (let data of legalMove) {
@@ -61,6 +62,7 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
 
     if (haveInteraction) {
         illegalMove(setIllegalMove);
+        wrongTurn(pieceMove, setPlayerTurn, true);
     }
     else {
         if (board[row][col] !== "" && !board[row][col].includes(pieceMove[0]) && validMove) {
@@ -70,6 +72,7 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
             setBoard(newBoard);
             setPieceMove("");
             setFirstMove({ row: null, col: null })
+            wrongTurn(pieceMove, setPlayerTurn);
         }
         else if (board[row][col] === "" && validMove) {
             const newBoard = [...board];
@@ -78,9 +81,11 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
             setBoard(newBoard);
             setPieceMove("");
             setFirstMove({ row: null, col: null });
+            wrongTurn(pieceMove, setPlayerTurn);
         }
         else {
             illegalMove(setIllegalMove);
+            wrongTurn(pieceMove, setPlayerTurn, true);
         }
     }
 

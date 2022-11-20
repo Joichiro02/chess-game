@@ -1,4 +1,5 @@
 import { illegalMove } from "./illegalMove";
+import { wrongTurn } from "./wrongTurn";
 
 export const knightMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLegalMove) => {
     setPieceMove(board[row][col]);
@@ -9,7 +10,7 @@ export const knightMoveFrom = (board, row, col, setPieceMove, setFirstMove, setL
     const leftSide = [{ row: row + 2, col: col - 2 }, { row: row - 1, col: col - 2 }];
     setLegalMove([...topSide, ...bottomSide, ...rightSide, ...leftSide]);
 }
-export const knightMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove) => {
+export const knightMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
     let validMove = false;
     for (let data of legalMove) {
         if (data.row === row && data.col === col) {
@@ -23,6 +24,7 @@ export const knightMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
         setBoard(newBoard);
         setPieceMove("");
         setFirstMove({ row: null, col: null })
+        wrongTurn(pieceMove, setPlayerTurn);
     }
     else if (board[row][col] === "" && validMove) {
         const newBoard = [...board];
@@ -31,9 +33,11 @@ export const knightMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
         setBoard(newBoard);
         setPieceMove("");
         setFirstMove({ row: null, col: null });
+        wrongTurn(pieceMove, setPlayerTurn);
     }
     else {
         illegalMove(setIllegalMove);
+        wrongTurn(pieceMove, setPlayerTurn, true);
     }
 
 }

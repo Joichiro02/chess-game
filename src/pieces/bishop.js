@@ -1,4 +1,5 @@
 import { illegalMove } from "./illegalMove";
+import { wrongTurn } from "./wrongTurn";
 
 export const bishopMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLegalMove) => {
     setPieceMove(board[row][col]);
@@ -6,7 +7,7 @@ export const bishopMoveFrom = (board, row, col, setPieceMove, setFirstMove, setL
     setLegalMove([row + col, row - col]);
 }
 
-export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove) => {
+export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
     let havePositiveInteraction = false;
     let haveNegativeInteraction = false;
     //for positive diagonal
@@ -31,8 +32,14 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
             }
         }
     }
-    if (haveNegativeInteraction) return illegalMove(setIllegalMove);
-    if (havePositiveInteraction) return illegalMove(setIllegalMove);
+    if (haveNegativeInteraction) {
+        wrongTurn(pieceMove, setPlayerTurn, true);
+        return illegalMove(setIllegalMove);
+    }
+    if (havePositiveInteraction) {
+        wrongTurn(pieceMove, setPlayerTurn, true);
+        return illegalMove(setIllegalMove);
+    }
     if (!board[row][col].includes(pieceMove[0])) {
         if (legalMove.includes(row + col) || legalMove.includes(row - col)) {
             if (row === firstMove.row && col === firstMove.col) return;
@@ -41,10 +48,12 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
             newBoard[firstMove.row][firstMove.col] = "";
             setBoard(newBoard);
             setPieceMove("");
-            setFirstMove({ row: null, col: null })
+            setFirstMove({ row: null, col: null });
+            wrongTurn(pieceMove, setPlayerTurn);
         }
     }
     else {
-        illegalMove(setIllegalMove)
+        illegalMove(setIllegalMove);
+        wrongTurn(pieceMove, setPlayerTurn, true);
     }
 }
