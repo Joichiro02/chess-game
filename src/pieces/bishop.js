@@ -1,44 +1,50 @@
+import { illegalMove } from "./illegalMove";
+
 export const bishopMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLegalMove) => {
     setPieceMove(board[row][col]);
-    setFirstMove({row, col});
+    setFirstMove({ row, col });
     setLegalMove([row + col, row - col]);
 }
 
-export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove) => {
+export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove) => {
     let havePositiveInteraction = false;
     let haveNegativeInteraction = false;
     //for positive diagonal
-    for(let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++){
-        for(let j = Math.min(firstMove.col, col); j < Math.max(firstMove.col, col); j++){
-            if((firstMove.row + firstMove.col) === (i + j) && !havePositiveInteraction){
-                if(row === i && col === j)continue;
-                if(board[i][j] !== "" && board[i][j] !== pieceMove){
+    for (let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++) {
+        for (let j = Math.min(firstMove.col, col); j < Math.max(firstMove.col, col); j++) {
+            if ((firstMove.row + firstMove.col) === (i + j) && !havePositiveInteraction) {
+                if (row === i && col === j) continue;
+                if (board[i][j] !== "" && board[i][j] !== pieceMove) {
                     havePositiveInteraction = true;
                 }
             }
         }
     }
     //for negative diagonal
-    for(let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++){
-        for(let j = Math.min(firstMove.col, col); j < Math.max(firstMove.col, col); j++){
-            if((firstMove.row - firstMove.col) === (i - j) && !haveNegativeInteraction){
-                if(row === i && col === j)continue;
-                if(board[i][j] !== "" && board[i][j] !== pieceMove){
+    for (let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++) {
+        for (let j = Math.min(firstMove.col, col); j < Math.max(firstMove.col, col); j++) {
+            if ((firstMove.row - firstMove.col) === (i - j) && !haveNegativeInteraction) {
+                if (row === i && col === j) continue;
+                if (board[i][j] !== "" && board[i][j] !== pieceMove) {
                     haveNegativeInteraction = true;
                 }
             }
         }
     }
-    if(haveNegativeInteraction) return alert("illegal move");
-    if(havePositiveInteraction) return alert("illegal move");
-    if(!board[row][col].includes(pieceMove[0])){
-        if(legalMove.includes(row + col) || legalMove.includes(row - col)){
-            if(row === firstMove.row && col === firstMove.col) return;
-            board[row][col] = pieceMove;
-            board[firstMove.row][firstMove.col] = "";
+    if (haveNegativeInteraction) return illegalMove(setIllegalMove);
+    if (havePositiveInteraction) return illegalMove(setIllegalMove);
+    if (!board[row][col].includes(pieceMove[0])) {
+        if (legalMove.includes(row + col) || legalMove.includes(row - col)) {
+            if (row === firstMove.row && col === firstMove.col) return;
+            const newBoard = [...board];
+            newBoard[row][col] = pieceMove;
+            newBoard[firstMove.row][firstMove.col] = "";
+            setBoard(newBoard);
+            setPieceMove("");
+            setFirstMove({ row: null, col: null })
         }
     }
-    else{
-        alert("illegal move");
+    else {
+        illegalMove(setIllegalMove)
     }
 }

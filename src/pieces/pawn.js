@@ -1,17 +1,19 @@
+import { illegalMove } from "./illegalMove";
+
 const whitePawn = (row, setLegalMove) => {
-    if(row === 6){
+    if (row === 6) {
         setLegalMove([row - 2, row - 1]);
     }
-    else{
+    else {
         setLegalMove([row - 1]);
     }
 }
 
 const blackPawn = (row, setLegalMove) => {
-    if(row === 1){
+    if (row === 1) {
         setLegalMove([row + 2, row + 1]);
     }
-    else{
+    else {
         setLegalMove([row + 1]);
     }
 }
@@ -19,7 +21,7 @@ const blackPawn = (row, setLegalMove) => {
 export const pawnMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLegalMove) => {
     const PAWN = board[row][col];
     setPieceMove(board[row][col]);
-    setFirstMove({row, col});
+    setFirstMove({ row, col });
     switch (PAWN) {
         case "WP":
             whitePawn(row, setLegalMove)
@@ -33,26 +35,26 @@ export const pawnMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
 }
 
 
-export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove) => {
+export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove) => {
     //for attacking piece
-    if(board[row][col] !== "" && (col === firstMove.col + 1 || col === firstMove.col - 1) && pieceMove[0] !== board[row][col][0]){
-        const newBoard = [...board]; 
-        newBoard[row][col] = pieceMove;
-        newBoard[firstMove.row][firstMove.col] = "";
-        setBoard(newBoard);
-        setPieceMove("");
-        setFirstMove({row:null, col:null})
-    }
-    // for moving piece
-    else if (legalMove.includes(row) && col === firstMove.col && board[row][col] === ""){
+    if (board[row][col] !== "" && (col === firstMove.col + 1 || col === firstMove.col - 1) && pieceMove[0] !== board[row][col][0]) {
         const newBoard = [...board];
         newBoard[row][col] = pieceMove;
         newBoard[firstMove.row][firstMove.col] = "";
         setBoard(newBoard);
         setPieceMove("");
-        setFirstMove({row:null, col:null})
+        setFirstMove({ row: null, col: null })
     }
-    else{
-        alert("illegal move")
+    // for moving piece
+    else if (legalMove.includes(row) && col === firstMove.col && board[row][col] === "") {
+        const newBoard = [...board];
+        newBoard[row][col] = pieceMove;
+        newBoard[firstMove.row][firstMove.col] = "";
+        setBoard(newBoard);
+        setPieceMove("");
+        setFirstMove({ row: null, col: null });
+    }
+    else {
+        illegalMove(setIllegalMove);
     }
 }

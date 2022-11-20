@@ -8,6 +8,7 @@ import { knightMoveFrom, knightMoveTo } from "./pieces/knight";
 import { pawnMoveFrom, pawnMoveTo } from "./pieces/pawn";
 import { queenMoveFrom, queenMoveTo } from "./pieces/queen";
 import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
+import PopUp from "./components/popUp/PopUp";
 
 const PIECES = {
   white: {
@@ -76,6 +77,7 @@ function App() {
     col: null
   });
   const [legalMove, setLegalMove] = useState(null);
+  const [illegalMove, setIllegalMove] = useState(false);
   // const [lastMove, setLastMove] = useState("B") for player turn
 
   const handleMove = (e, row, col) => {
@@ -118,22 +120,22 @@ function App() {
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
-          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
           break;
         case "ROOK":
-          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
+          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
           break;
         case "HORSE":
-          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
           break;
         case "BISHOP":
-          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
+          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
           break;
         case "QUEEN":
-          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove);
+          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove);
+          kingMoveTo(board, row, col, firstMove, pieceMove, setIllegalMove);
           break;
         default:
           break;
@@ -161,6 +163,7 @@ function App() {
           ))
         }
       </div>
+      {illegalMove ? <PopUp /> : null}
     </div>
   )
 }
