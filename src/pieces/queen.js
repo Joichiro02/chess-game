@@ -1,3 +1,4 @@
+import { check } from "./check";
 import { illegalMove } from "./illegalMove";
 import { wrongTurn } from "./wrongTurn";
 
@@ -14,7 +15,7 @@ export const queenMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLe
     }
     setLegalMove({ cross: [...columnMove, ...rowMove], diagonal: [row + col, row - col] });
 }
-export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
+export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy) => {
     //FROM ROOK CODES
     let validMove = false;
     let haveInteraction = false;
@@ -60,6 +61,7 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, se
     if (!board[row][col].startsWith(pieceMove[0])) {
         if (legalMove.diagonal.includes(row + col) || legalMove.diagonal.includes(row - col)) {
             if (row === firstMove.row && col === firstMove.col) return;
+            setPieceDestroy([...pieceDestroy, board[row][col]]);
             const newBoard = [...board];
             newBoard[row][col] = pieceMove;
             newBoard[firstMove.row][firstMove.col] = "";
@@ -67,11 +69,11 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, se
             setPieceMove("");
             setFirstMove({ row: null, col: null });
             wrongTurn(pieceMove, setPlayerTurn);
+            check(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
         }
         else{
             //ROOK CODES START HERE
             if (firstMove.row === row) {
-                console.log("rook move if")
                 for (let i = Math.min(col, firstMove.col); i < Math.max(col, firstMove.col); i++) {
                     if (!haveInteraction) {
                         if (board[row][i] !== "") {
@@ -90,7 +92,6 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, se
                 }
             }
             else {
-                console.log("rook move else")
                 for (let i = Math.min(firstMove.row, row); i < Math.max(firstMove.row, row); i++) {
                     if (!haveInteraction) {
                         if (board[i][col] !== "") {
@@ -114,6 +115,7 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, se
             }
             else {
                 if (board[row][col] !== "" && !board[row][col].includes(pieceMove[0]) && validMove) {
+                    setPieceDestroy([...pieceDestroy, board[row][col]]);
                     const newBoard = [...board];
                     newBoard[row][col] = pieceMove;
                     newBoard[firstMove.row][firstMove.col] = "";
@@ -140,7 +142,6 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, se
         }
     }
     else {
-        console.log("else");
         illegalMove(setIllegalMove);
         wrongTurn(pieceMove, setPlayerTurn, true);
     }

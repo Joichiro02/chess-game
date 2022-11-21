@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import classNames from "classnames";
 import { FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn } from "react-icons/fa";
@@ -104,6 +104,7 @@ function App() {
   const [activeElement, setActiveElement] = useState(null); // save the element that have been click
   const [playerTurn, setPlayerTurn] = useState("W");
   const [wrongTurn, setWrongTurn] = useState(false);
+  const [pieceDestroy, setPieceDestroy] = useState([]); //save here the pieces that destroy
   // const [lastMove, setLastMove] = useState("B") for player turn
 
   const handleMove = (e, row, col) => {
@@ -171,22 +172,22 @@ function App() {
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
-          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
           break;
         case "ROOK":
-          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
           break;
         case "HORSE":
-          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
           break;
         case "BISHOP":
-          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
           break;
         case "QUEEN":
-          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
           break;
         default:
           break;
@@ -201,6 +202,15 @@ function App() {
 
   return (
     <div className="App">
+      <div className="piecesDestroy">
+        {
+          pieceDestroy ? pieceDestroy.map((item, index) => (
+            <React.Fragment key={index}>
+              {PIECES.white[item]}
+            </React.Fragment>
+          )) : null
+        }
+      </div>
       <div className="mainBoard">
         {
           board.map((row, i) => (
@@ -217,6 +227,15 @@ function App() {
               }
             </div>
           ))
+        }
+      </div>
+      <div className="piecesDestroy">
+        {
+          pieceDestroy ? pieceDestroy.map((item, index) => (
+            <React.Fragment key={index}>
+              {PIECES.black[item]}
+            </React.Fragment>
+          )) : null
         }
       </div>
       {illegalMove ? <PopUp message={"Illegal Move!!!"} /> : null}

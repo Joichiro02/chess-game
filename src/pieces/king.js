@@ -14,8 +14,8 @@ export const kingMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
     for(let move of legalMove){
         legalMoves.push(move[0] === row && move[1] === col);
     }
-    const check = legalMoves.some(check => check === true);
-    if(check){
+    const checkLegalMove = legalMoves.some(check => check === true);
+    if(checkLegalMove){
         if (board[row][col] === "") {
             const newBoard = [...board];
             newBoard[row][col] = pieceMove;
@@ -26,6 +26,7 @@ export const kingMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
             wrongTurn(pieceMove, setPlayerTurn);
         }
         else if (!board[row][col].includes(pieceMove[0])) {
+            setPieceDestroy([...pieceDestroy, board[row][col]]);
             const newBoard = [...board];
             newBoard[row][col] = pieceMove;
             newBoard[firstMove.row][firstMove.col] = "";

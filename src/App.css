@@ -1,7 +1,8 @@
 .App {
   position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   user-select: none;
   background-color: #bbb;
   height: 100vh;
@@ -68,7 +69,17 @@
   border: 2px solid blueviolet !important;
 }
 
+.piecesDestroy{   
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+}
+
 @media only screen and (max-width: 425px) {
+  .App{
+    flex-direction: column;
+  }
   .mainBoard {
     height: 100vw;
     width: 100vw;

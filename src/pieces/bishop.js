@@ -7,7 +7,7 @@ export const bishopMoveFrom = (board, row, col, setPieceMove, setFirstMove, setL
     setLegalMove([row + col, row - col]);
 }
 
-export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn) => {
+export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy) => {
     let havePositiveInteraction = false;
     let haveNegativeInteraction = false;
     //for positive diagonal
@@ -42,12 +42,14 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
     }
     if (!board[row][col].startsWith(pieceMove[0])) {
         if (legalMove.includes(row + col) || legalMove.includes(row - col)) {
-            console.log(legalMove.includes(row + col), legalMove.includes(row - col), legalMove)
             if (row === firstMove.row || col === firstMove.col) {
                 illegalMove(setIllegalMove);
                 wrongTurn(pieceMove, setPlayerTurn, true);
                 return
             };
+            if(board[row][col] !== ""){
+                setPieceDestroy([...pieceDestroy, board[row][col]]);
+            }
             const newBoard = [...board];
             newBoard[row][col] = pieceMove;
             newBoard[firstMove.row][firstMove.col] = "";
