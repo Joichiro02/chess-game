@@ -79,14 +79,14 @@ const wrongMove = (playerTurn, setWrongTurn) => {
 
 function App() {
   const [board, setBoard] = useState([
-    ["BKR", "BKH", "BKB", "BK", "BQ", "BQB", "BQH", "BQR"],
+    ["BQR", "BQH", "BQB", "BQ", "BK", "BKB", "BKH", "BKR"],
     ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
     ["", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", ""],
     ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
-    ["WKR", "WKH", "WKB", "WK", "WQ", "WQB", "WQH", "WQR"],
+    ["WQR", "WQH", "WQB", "WQ", "WK", "WKB", "WKH", "WKR"],
   ]);
   const [move, setMove] = useState(false); // check if the piece is have been moved
   const [pieceMove, setPieceMove] = useState(""); // record here the piece code that use in the array board
@@ -148,7 +148,7 @@ function App() {
           break;
         case "KING":
           setPieceMoved("KING");
-          kingMoveFrom(board, row, col, setPieceMove, setFirstMove);
+          kingMoveFrom(board, row, col, setPieceMove, setFirstMove, setLegalMove);
           break;
         default:
           break;
@@ -181,7 +181,7 @@ function App() {
           queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
+          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
           break;
         default:
           break;
