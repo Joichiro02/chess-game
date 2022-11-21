@@ -51,9 +51,12 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, s
             setFirstMove({ row: null, col: null });
             wrongTurn(pieceMove, setPlayerTurn);
         }
+        else{
+            illegalMove(setIllegalMove);
+            wrongTurn(pieceMove, setPlayerTurn, true);
+        }
     }
     else {
-        console.log("else");
         illegalMove(setIllegalMove);
         wrongTurn(pieceMove, setPlayerTurn, true);
     }
