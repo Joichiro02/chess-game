@@ -114,7 +114,7 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pi
                 wrongTurn(pieceMove, setPlayerTurn, true);
             }
             else {
-                if (board[row][col] !== "" && !board[row][col].includes(pieceMove[0]) && validMove) {
+                if (board[row][col] !== "" && !board[row][col].startsWith(pieceMove[0]) && validMove) {
                     setPieceDestroy([...pieceDestroy, board[row][col]]);
                     const newBoard = [...board];
                     newBoard[row][col] = pieceMove;
