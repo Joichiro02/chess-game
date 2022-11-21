@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import classNames from "classnames";
 import { FaChessRook, FaChessKnight, FaChessBishop, FaChessKing, FaChessQueen, FaChessPawn } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { pawnMoveFrom, pawnMoveTo } from "./pieces/pawn";
 import { queenMoveFrom, queenMoveTo } from "./pieces/queen";
 import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
 import PopUp from "./components/popUp/PopUp";
+import sound from "./sounds/move.mp3";
 
 /*
   BUGS
@@ -78,6 +79,9 @@ const wrongMove = (playerTurn, setWrongTurn) => {
 }
 
 function App() {
+  // use Audio constructor to create HTMLAudioElement
+  const audioTune = new Audio(sound);
+
   const [board, setBoard] = useState([
     ["BQR", "BQH", "BQB", "BQ", "BK", "BKB", "BKH", "BKR"],
     ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
@@ -155,6 +159,7 @@ function App() {
       }
     }
     else {
+      audioTune.play();
       const boxes = document.getElementsByClassName("box");
       for (let box of boxes) {
         if (box.innerHTML === "") continue;
@@ -188,6 +193,11 @@ function App() {
       }
     }
   }
+  
+  // load audio file on component load
+  useEffect(() => {
+    audioTune.load();
+  }, []);
 
   return (
     <div className="App">

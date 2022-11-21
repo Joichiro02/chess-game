@@ -61,11 +61,12 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
     }
 
     if (haveInteraction) {
+        console.log("interaction");
         illegalMove(setIllegalMove);
         wrongTurn(pieceMove, setPlayerTurn, true);
     }
     else {
-        if (board[row][col] !== "" && !board[row][col].includes(pieceMove[0]) && validMove) {
+        if (board[row][col] !== "" && !board[row][col].startsWith(pieceMove[0]) && validMove) {
             const newBoard = [...board];
             newBoard[row][col] = pieceMove;
             newBoard[firstMove.row][firstMove.col] = "";
@@ -86,6 +87,7 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, set
         else {
             illegalMove(setIllegalMove);
             wrongTurn(pieceMove, setPlayerTurn, true);
+            console.log("interaction 2");
         }
     }
 

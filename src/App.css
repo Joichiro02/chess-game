@@ -56,12 +56,12 @@
 
 .white {
   color: white;
-  font-size: 2rem;
+  font-size: 4rem;
 }
 
 .black {
   color: black;
-  font-size: 2rem;
+  font-size: 4rem;
 }
 
 .active {
@@ -72,6 +72,15 @@
   .mainBoard {
     height: 100vw;
     width: 100vw;
+  }
+  .white {
+    color: white;
+    font-size: 1.5rem;
+  }
+  
+  .black {
+    color: black;
+    font-size: 1.5rem;
   }
 }
 
