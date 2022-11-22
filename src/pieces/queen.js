@@ -15,7 +15,7 @@ export const queenMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLe
     }
     setLegalMove({ cross: [...columnMove, ...rowMove], diagonal: [row + col, row - col] });
 }
-export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy) => {
+export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck) => {
     //FROM ROOK CODES
     let validMove = false;
     let haveInteraction = false;
@@ -69,7 +69,6 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pi
             setPieceMove("");
             setFirstMove({ row: null, col: null });
             wrongTurn(pieceMove, setPlayerTurn);
-            check(board, row, col, firstMove, pieceMove, legalMove, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn);
         }
         else{
             //ROOK CODES START HERE
@@ -146,4 +145,63 @@ export const queenMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pi
         wrongTurn(pieceMove, setPlayerTurn, true);
     }
     //BISHOP CODES END HERE
+
+    //THIS CODE IS FOR CHECKING THE KING
+    //CHECK IF THE KING IS UNDERATTACK DIAGONALLY
+    const arrPos = [];
+    const arrNeg = [];
+    for(let i = 0; i < 8; i++){
+        for(let j = 0; j < 8; j++){
+            if(i+j === row+col && board[i][j] !== ""){
+                arrPos.push(board[i][j]);
+            }
+        }
+    }
+    for(let i = 0; i < 8; i++){
+        for(let j = 0; j < 8; j++){
+            if(i-j === row-col && board[i][j] !== ""){
+                arrNeg.push(board[i][j]);
+            }
+        }
+    }
+    const kingDia = pieceMove.startsWith("W") ? "BK" : "WK";
+    const kingPos = arrPos.indexOf(kingDia);
+    const kingNeg = arrNeg.indexOf(kingDia);
+    if(kingPos > -1){
+        if(arrPos[kingPos-1] === pieceMove || arrPos[kingPos+1] === pieceMove){
+            check(setKingCheck);
+        }
+    }
+    if(kingNeg > -1){
+        if(arrNeg[kingNeg-1] === pieceMove || arrNeg[kingNeg+1] === pieceMove){
+            check(setKingCheck);
+        }
+    }
+
+    //CHECK IF THE KING IS UNDERATTACK CROSS
+    const arrRow = [];
+    const arrCol = [];
+    for(let i = 0; i < 8; i++){
+        if(board[row][i] !== ""){
+            arrRow.push(board[row][i]);
+        }
+    }
+    for(let i = 0; i < 8; i++){
+        if(board[i][col] !== ""){
+            arrCol.push(board[i][col]);
+        }
+    }
+    const kingCross = pieceMove.startsWith("W") ? "BK" : "WK";
+    const kingRow = arrRow.indexOf(kingCross);
+    const kingCol = arrCol.indexOf(kingCross);
+    if(kingRow > -1){
+        if(arrRow[kingRow-1] === pieceMove || arrRow[kingRow+1] === pieceMove){
+            check(setKingCheck);
+        }
+    }
+    if(kingCol > -1){
+        if(arrCol[kingCol-1] === pieceMove || arrCol[kingCol+1] === pieceMove){
+            check(setKingCheck);
+        }
+    }
 }

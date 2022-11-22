@@ -36,7 +36,7 @@ export const pawnMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
 }
 
 
-export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy) => {
+export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck) => {
     //for attacking piece
     if (board[row][col] !== "" && (col === firstMove.col + 1 || col === firstMove.col - 1) && pieceMove[0] !== board[row][col][0]) {
         //this is to not allowed the backward attack of white pawn

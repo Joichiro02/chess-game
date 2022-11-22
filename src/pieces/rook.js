@@ -1,3 +1,4 @@
+import { check } from "./check";
 import { illegalMove } from "./illegalMove";
 import { wrongTurn } from "./wrongTurn";
 
@@ -15,7 +16,7 @@ export const rookMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
     setLegalMove([...columnMove, ...rowMove]);
 
 }
-export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy) => {
+export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck) => {
     let validMove = false;
     let haveInteraction = false;
     for (let data of legalMove) {
@@ -90,4 +91,32 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pie
         }
     }
 
+    //THIS CODE IS FOR CHECKING THE KING
+    //CHECK IF THE KING IS UNDERATTACK
+    const arrRow = [];
+    const arrCol = [];
+    for(let i = 0; i < 8; i++){
+        if(board[row][i] !== ""){
+            arrRow.push(board[row][i]);
+        }
+    }
+    for(let i = 0; i < 8; i++){
+        if(board[i][col] !== ""){
+            arrCol.push(board[i][col]);
+        }
+    }
+    const king = pieceMove.startsWith("W") ? "BK" : "WK";
+    const kingRow = arrRow.indexOf(king);
+    const kingCol = arrCol.indexOf(king);
+    if(kingRow > -1){
+        if(arrRow[kingRow-1] === pieceMove || arrRow[kingRow+1] === pieceMove){
+            check(setKingCheck);
+        }
+    }
+    if(kingCol > -1){
+        if(arrCol[kingCol-1] === pieceMove || arrCol[kingCol+1] === pieceMove){
+            check(setKingCheck);
+        }
+    }
+    
 }

@@ -102,9 +102,10 @@ function App() {
   const [legalMove, setLegalMove] = useState(null); // add here the list of legal move
   const [illegalMove, setIllegalMove] = useState(false); // this is use to trigger the popup modal
   const [activeElement, setActiveElement] = useState(null); // save the element that have been click
-  const [playerTurn, setPlayerTurn] = useState("W");
-  const [wrongTurn, setWrongTurn] = useState(false);
+  const [playerTurn, setPlayerTurn] = useState("W"); //use to for player turn
+  const [wrongTurn, setWrongTurn] = useState(false); //use to alert in 
   const [pieceDestroy, setPieceDestroy] = useState([]); //save here the pieces that destroy
+  const [kingCheck, setKingCheck] = useState(false);
   // const [lastMove, setLastMove] = useState("B") for player turn
 
   const handleMove = (e, row, col) => {
@@ -172,22 +173,22 @@ function App() {
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
-          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
           break;
         case "ROOK":
-          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
+          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
           break;
         case "HORSE":
-          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
           break;
         case "BISHOP":
-          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
+          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
           break;
         case "QUEEN":
-          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
+          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy);
+          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
           break;
         default:
           break;
@@ -239,6 +240,7 @@ function App() {
         }
       </div>
       {illegalMove ? <PopUp message={"Illegal Move!!!"} /> : null}
+      {kingCheck ? <PopUp message={"Check"} /> : null}
       {wrongTurn ? <PopUp message={playerTurn === "W" ? "White turn" : "Black Turn"} /> : null}
     </div>
   )
