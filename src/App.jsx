@@ -10,6 +10,7 @@ import { queenMoveFrom, queenMoveTo } from "./pieces/queen";
 import { rookMoveFrom, rookMoveTo } from "./pieces/rook";
 import PopUp from "./components/popUp/PopUp";
 import sound from "./sounds/move.mp3";
+import PawnPromotion from './components/pawnPromotion/PawnPromotion';
 
 /*
   BUGS
@@ -108,8 +109,13 @@ function App() {
   const [kingCheck, setKingCheck] = useState(false);
   const [kingIsUnderAttacked, setkingIsUnderAttacked] = useState(false);//if king is underAttack the king is the only one that will be move
   const [kingUnderAttackAlert, setKingUnderAttackAlert] = useState(false);
+  const [pawnPomotion, setPawnPromotion] = useState(false);
+  const [boardRow, setBoardRow] = useState(null);
+  const [boardCol, setBoardCol] = useState(null);
 
   const handleMove = (e, row, col) => {
+    setBoardRow(row);
+    setBoardCol(col);
     if (!move && board[row][col] === "") return console.log("please select piece!!!");
     // if(board[row][col].startsWith(lastMove)) return alert(lastMove === "B" ? "White Turn" : "Black Turn"); //for player turn
     const PIECE = pieceToMove(board, row, col);
@@ -174,7 +180,7 @@ function App() {
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
-          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert, setPawnPromotion);
           break;
         case "ROOK":
           rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
@@ -244,6 +250,7 @@ function App() {
       {kingCheck ? <PopUp message={"Check"} /> : null}
       {wrongTurn ? <PopUp message={playerTurn === "W" ? "White turn" : "Black Turn"} /> : null}
       {kingUnderAttackAlert ? <PopUp message={"King is Under Attack"} /> : null}
+      {pawnPomotion ? <PawnPromotion pieceMove={pieceMove} setBoard={setBoard} setPawnPromotion={setPawnPromotion} board={board} row={boardRow} col={boardCol} /> : null}
     </div>
   )
 }

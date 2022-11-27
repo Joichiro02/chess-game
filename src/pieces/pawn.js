@@ -1,3 +1,4 @@
+import { check } from "./check";
 import { illegalMove } from "./illegalMove";
 import { wrongTurn } from "./wrongTurn";
 
@@ -36,7 +37,7 @@ export const pawnMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
 }
 
 
-export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setKingIsUnderAttacked, setKingUnderAttackAlert) => {
+export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setKingIsUnderAttacked, setKingUnderAttackAlert, setPawnPromotion) => {
     const kingChecked = pieceMove.startsWith("W") ? "BK" : "WK";
     if (kingIsUnderAttacked && board[row][col] !== kingChecked) {
         setKingUnderAttackAlert(true);
@@ -93,5 +94,23 @@ export const pawnMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pie
     else {
         illegalMove(setIllegalMove);
         wrongTurn(pieceMove, setPlayerTurn, true);
+    }
+
+    //for checking the king
+    if (pieceMove.startsWith("W") && row > 0) {
+        if (board[row - 1][col - 1] === "BK" || board[row - 1][col + 1] === "BK") {
+            console.log(board[row - 1][col - 1], board[row - 1][col + 1]);
+            setKingIsUnderAttacked(true);
+            check(setKingCheck);
+        }
+    }
+    else if (pieceMove.startsWith("B") && row < 7) {
+        if (board[row + 1][col - 1] === "WK" || board[row + 1][col + 1] === "WK") {
+            setKingIsUnderAttacked(true);
+            check(setKingCheck);
+        }
+    }
+    else {
+        setPawnPromotion(true);
     }
 }

@@ -57,7 +57,7 @@ export const knightMoveTo = (board, row, col, firstMove, pieceMove, legalMove, p
     const rightSide = [{ row: row + 1, col: col + 2 }, { row: row - 1, col: col + 2 }];
     const leftSide = [{ row: row + 1, col: col - 2 }, { row: row - 1, col: col - 2 }];
     const possibleCheck = [...topSide, ...bottomSide, ...rightSide, ...leftSide];
-    console.log(bottomSide)
+
     for (let checkKing of possibleCheck) {
         if (checkKing.row < 0 || checkKing.row > 8 || checkKing.col < 0 || checkKing.col > 8) continue;
         if (board[checkKing?.row][checkKing?.col] === kingTurn) {

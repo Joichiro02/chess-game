@@ -1,0 +1,65 @@
+.pawnPromotionContainer {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    top: 50%;
+    left: 50%;
+    width: 30vw;
+    height: 10vh;
+    transform: translate(-50%, -50%);
+    background-color: rgba(19, 209, 35, 0.741);
+    color: #ddd;
+    font-size: 2rem;
+    border-radius: .5rem;
+
+    .officialsContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        list-style: none;
+        width: 100%;
+
+        .officialContent {
+            .whiteOfficial {
+                // font-size: 1rem;
+                color: white;
+            }
+
+            .blackOfficial {
+                // font-size: 1rem;
+                color: black;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .pawnPromotionContainer {
+        width: 70vw;
+        height: 10vh;
+        font-size: 1.5rem;
+
+        .whiteOfficial {
+            font-size: 2rem;
+        }
+
+        .blackOfficial {
+            font-size: 2rem;
+        }
+    }
+}
+
+@media only screen and ((max-width: 768px) and (min-width: 426px)) {
+    .pawnPromotionContainer {
+        width: 70vw;
+        height: 10vh;
+
+        .whiteOfficial {
+            font-size: 3.5rem;
+        }
+
+        .blackOfficial {
+            font-size: 3.5rem;
+        }
+    }
+}
