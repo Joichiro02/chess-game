@@ -8,7 +8,15 @@ export const bishopMoveFrom = (board, row, col, setPieceMove, setFirstMove, setL
     setLegalMove([row + col, row - col]);
 }
 
-export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck) => {
+export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setKingIsUnderAttacked, setKingUnderAttackAlert) => {
+    const kingChecked = pieceMove.startsWith("W") ? "BK" : "WK";
+    if (kingIsUnderAttacked && board[row][col] !== kingChecked) {
+        setKingUnderAttackAlert(true);
+        setTimeout(() => {
+            setKingUnderAttackAlert(false);
+        }, 500);
+        return;
+    }
     let havePositiveInteraction = false;
     let haveNegativeInteraction = false;
     //for positive diagonal
@@ -48,7 +56,7 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, p
                 wrongTurn(pieceMove, setPlayerTurn, true);
                 return
             };
-            if(board[row][col] !== ""){
+            if (board[row][col] !== "") {
                 setPieceDestroy([...pieceDestroy, board[row][col]]);
             }
             const newBoard = [...board];
@@ -59,7 +67,7 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, p
             setFirstMove({ row: null, col: null });
             wrongTurn(pieceMove, setPlayerTurn);
         }
-        else{
+        else {
             illegalMove(setIllegalMove);
             wrongTurn(pieceMove, setPlayerTurn, true);
         }
@@ -72,16 +80,16 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, p
     //CHECK IF THE KING IS UNDERATTACK
     const arrPos = [];
     const arrNeg = [];
-    for(let i = 0; i < 8; i++){
-        for(let j = 0; j < 8; j++){
-            if(i+j === row+col && board[i][j] !== ""){
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (i + j === row + col && board[i][j] !== "") {
                 arrPos.push(board[i][j]);
             }
         }
     }
-    for(let i = 0; i < 8; i++){
-        for(let j = 0; j < 8; j++){
-            if(i-j === row-col && board[i][j] !== ""){
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (i - j === row - col && board[i][j] !== "") {
                 arrNeg.push(board[i][j]);
             }
         }
@@ -89,13 +97,15 @@ export const bishopMoveTo = (board, row, col, firstMove, pieceMove, legalMove, p
     const king = pieceMove.startsWith("W") ? "BK" : "WK";
     const kingPos = arrPos.indexOf(king);
     const kingNeg = arrNeg.indexOf(king);
-    if(kingPos > -1){
-        if(arrPos[kingPos-1] === pieceMove || arrPos[kingPos+1] === pieceMove){
+    if (kingPos > -1) {
+        if (arrPos[kingPos - 1] === pieceMove || arrPos[kingPos + 1] === pieceMove) {
+            setKingIsUnderAttacked(true);
             check(setKingCheck);
         }
     }
-    if(kingNeg > -1){
-        if(arrNeg[kingNeg-1] === pieceMove || arrNeg[kingNeg+1] === pieceMove){
+    if (kingNeg > -1) {
+        if (arrNeg[kingNeg - 1] === pieceMove || arrNeg[kingNeg + 1] === pieceMove) {
+            setKingIsUnderAttacked(true);
             check(setKingCheck);
         }
     }

@@ -16,7 +16,15 @@ export const rookMoveFrom = (board, row, col, setPieceMove, setFirstMove, setLeg
     setLegalMove([...columnMove, ...rowMove]);
 
 }
-export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck) => {
+export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setKingIsUnderAttacked, setKingUnderAttackAlert) => {
+    const kingChecked = pieceMove.startsWith("W") ? "BK" : "WK";
+    if (kingIsUnderAttacked && board[row][col] !== kingChecked) {
+        setKingUnderAttackAlert(true);
+        setTimeout(() => {
+            setKingUnderAttackAlert(false);
+        }, 500);
+        return;
+    }
     let validMove = false;
     let haveInteraction = false;
     for (let data of legalMove) {
@@ -95,28 +103,30 @@ export const rookMoveTo = (board, row, col, firstMove, pieceMove, legalMove, pie
     //CHECK IF THE KING IS UNDERATTACK
     const arrRow = [];
     const arrCol = [];
-    for(let i = 0; i < 8; i++){
-        if(board[row][i] !== ""){
+    for (let i = 0; i < 8; i++) {
+        if (board[row][i] !== "") {
             arrRow.push(board[row][i]);
         }
     }
-    for(let i = 0; i < 8; i++){
-        if(board[i][col] !== ""){
+    for (let i = 0; i < 8; i++) {
+        if (board[i][col] !== "") {
             arrCol.push(board[i][col]);
         }
     }
     const king = pieceMove.startsWith("W") ? "BK" : "WK";
     const kingRow = arrRow.indexOf(king);
     const kingCol = arrCol.indexOf(king);
-    if(kingRow > -1){
-        if(arrRow[kingRow-1] === pieceMove || arrRow[kingRow+1] === pieceMove){
+    if (kingRow > -1) {
+        if (arrRow[kingRow - 1] === pieceMove || arrRow[kingRow + 1] === pieceMove) {
+            setKingIsUnderAttacked(true);
             check(setKingCheck);
         }
     }
-    if(kingCol > -1){
-        if(arrCol[kingCol-1] === pieceMove || arrCol[kingCol+1] === pieceMove){
+    if (kingCol > -1) {
+        if (arrCol[kingCol - 1] === pieceMove || arrCol[kingCol + 1] === pieceMove) {
+            setKingIsUnderAttacked(true);
             check(setKingCheck);
         }
     }
-    
+
 }

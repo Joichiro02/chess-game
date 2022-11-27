@@ -106,7 +106,8 @@ function App() {
   const [wrongTurn, setWrongTurn] = useState(false); //use to alert in 
   const [pieceDestroy, setPieceDestroy] = useState([]); //save here the pieces that destroy
   const [kingCheck, setKingCheck] = useState(false);
-  // const [lastMove, setLastMove] = useState("B") for player turn
+  const [kingIsUnderAttacked, setkingIsUnderAttacked] = useState(false);//if king is underAttack the king is the only one that will be move
+  const [kingUnderAttackAlert, setKingUnderAttackAlert] = useState(false);
 
   const handleMove = (e, row, col) => {
     if (!move && board[row][col] === "") return console.log("please select piece!!!");
@@ -173,29 +174,29 @@ function App() {
       // setLastMove(pieceMove[0]) for player turn
       switch (pieceMoved) {
         case "PAWN":
-          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
+          pawnMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
           break;
         case "ROOK":
-          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
+          rookMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
           break;
         case "HORSE":
-          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
+          knightMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
           break;
         case "BISHOP":
-          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
+          bishopMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
           break;
         case "QUEEN":
-          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
+          queenMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, kingIsUnderAttacked, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked, setKingUnderAttackAlert);
           break;
         case "KING":
-          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck);
+          kingMoveTo(board, row, col, firstMove, pieceMove, legalMove, pieceDestroy, setBoard, setPieceMove, setFirstMove, setIllegalMove, setPlayerTurn, setPieceDestroy, setKingCheck, setkingIsUnderAttacked);
           break;
         default:
           break;
       }
     }
   }
-  
+
   // load audio file on component load
   useEffect(() => {
     audioTune.load();
@@ -242,6 +243,7 @@ function App() {
       {illegalMove ? <PopUp message={"Illegal Move!!!"} /> : null}
       {kingCheck ? <PopUp message={"Check"} /> : null}
       {wrongTurn ? <PopUp message={playerTurn === "W" ? "White turn" : "Black Turn"} /> : null}
+      {kingUnderAttackAlert ? <PopUp message={"King is Under Attack"} /> : null}
     </div>
   )
 }
